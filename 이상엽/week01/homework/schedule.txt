@@ -1,0 +1,59 @@
+1주차
+000_Machine/Deep learning 수업의 개요와 일정
+011_Machine Learning의 용어와 개념 설명
+012_TensorFlow의 설치 및 기본적인 operations
+021_Linear Regression의 Hypothesis 와 cost 설명
+022_TensorFlow로 간단한 linear regression을 구현
+2주차
+031_Linear Regression의 cost 최소화 알고리즘의 원리 설명
+032_Linear Regression의 cost 최소화의 TensorFlow 구현
+041_multi-variable linear regression
+042_multi-variable linear regression을 TensorFlow에서 구현하기
+043_TensorFlow로 파일에서 데이타 읽어오기
+3주차
+051_Logistic Classfication의 가설 함수 정의
+052_Logistic Regression의 cost 함수 설명
+053_TensorFlow로 Logistic Classfication의 구현하기
+061_Softmax Regression 기본 개념 소개
+062_Softmax classifier의 cost함수
+063_Tensorflow로 Softmax Classification의 구현하기
+064_TensorFlow로 Fancy Softmax Classfication의 구현하기
+4주차
+071_학습rate, Overfitting, 그리고 일반화(Regularization)
+072_Training/Testing 데이타 셋
+073_Training/test Dataset, learning rate, normalization
+074_Meet MNIST Dataset
+081_딥러닝의 기본 개념: 시작과 XOR문제
+082_딥러닝의 기본 개념2: Back-propagation 과 2006/2007'딥'의 출현
+083_Tensor Manipulation
+5주차
+091_XOR 문제 딥러닝으로 풀기
+092_10분안에 미분 정리하기
+093_딥넷트웍 학습 시키기(backpropagation)
+094_Neural net for XOR
+095_Tensorboard(Neural Net for XOR)
+6주차
+101_Sigmoid 보다 ReLU가 더 좋아
+102_Weight 초기화 잘해보자
+103_Dropout과 앙상블
+104_레고처럼 넷트웍 모듈을 마음껏 쌓아 보자
+105_NN, ReLu, Xavier, Dropout, and Adam
+7주차
+111_ConvNet의 Conv 레이어 만들기
+112_ConvNet Max pooling과 Full Network
+113_ConvNet의 활용예
+114_TensorFlow CNN Basics
+115_MNIST 99% with CNN
+116_CNN class, Layers, Ensemble
+8주차
+121_NN의 꽃 RNN이야기
+122_RNN - Basics
+123_RNN - Hi Hello Training
+124_Long Sequence RNN
+125_Stacked RNN + Softmax Layer
+126_Dynamic RNN
+127_RNN with Time Series Data
+
+9주차
+131_TensorFlow를 AWS에서 GPU와 함께 돌려보자
+141_AWS에서 저렴하게 Spot Instance를 터미네이션 걱정없이 사용하기
