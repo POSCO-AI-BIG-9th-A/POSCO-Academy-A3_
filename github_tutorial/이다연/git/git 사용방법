@@ -1,0 +1,86 @@
+1. Git(깃)이란? 
+    - 프로그램 등의 소스 코드 관리를 위한 분산 버전 관리 시스템
+    - 중앙 서버 컴퓨터와 여러개의 컴퓨터들이 연결되어 모두 같은 버전의 데이터베이스를 유지
+    
+    
+2. 기본 용어
+    - 커맨트 라인(Command Lind): 깃 명령어를 입력할 때 사용하는 컴퓨터 프로그램
+    - 저장소(Respository) : 프로젝트가 거자할 수 있는 디렉토리나 저장 공간
+      * 사용자는 종종 repo로 줄여서 말함
+    - 버전관리(Version Control) : 프로젝트 히스토리의 모든 시점이 '스냅샷'을 유지하므로 코드를 잃어버리거나 겹쳐쓰지 않음
+    - 커밋(Commit) : 깃에게 파워를 주는 명령
+    - 브랜치(Branch) : 작업자들은 메인 프로젝트의 브랜치를 따와 자신이 변경하고 싶은 버전을 만들 수 있음
+    
+    
+3. 주요 명령어 
+    - git init : 깃 저장소를 초기화 
+    - git config : 'configure'의 줄임말
+    - git help : 알고 싶은 명령어를 타이핑하면 사용법을 알려줌
+    - git status : 저장소 상태를 체크하고 어떤 파일이 저장소에 있는지 
+                  현재 저장소의 어떤 브랜치에서 작업하고 있는지를 알 수 있음
+    - git add : 파일을 추가하면 깃의 저장소 '스냅샷'에 포함
+    - git commit : 어떤 변경사항을 만든 후 저장소의 '스냅샷'을 찍기 위해 입력 
+                  * 보통 git commit -m "Message hear." 형식으로 사용
+                   -m은 명령어의 그 다음 부분을 메세지를 읽음
+    - git branch : 새로운 브랜치를 만들고, 나만의 변경사항과 파일 추가등을 커밋 타임라인을 만듬
+                  * 새 브랜치를 'cats'로 부르고 싶으면 git branch cats로 들여다볼 수 있음
+    - git checkout : 현지 위치하고 있지 않은 저장소를 체크아웃할 수 있음
+                  * master 브랜치를 보고 싶으면 git checkout master 를 사용할 수 있음
+    - git merge : 브랜치에서 작업을 끝내고, 모든 협업자가 볼 수 있는 master 브랜치로 병합할 수 있음
+    - git push : 로컬 컴퓨터에서 작업하고 커밋을 깃허브에서 온라인으로도 보기를 원한다면 push한다. 
+    - git pull : 로컬 컴퓨터에서 작업할 때 작업하고 있는 저장소의 최신 버전을 원한다면 이 명령어로 변경사항 다운로드
+    
+ 4. 처음으로 깃/깃허브 설정 
+    1) 로컬 컴퓨터에 깃을 설치
+    2) 다음과 같은 코드를 입력
+      > git config -- global user.name "Your Name Here"
+    3) "Your Name Here" 안에 자신의 이름을 넣어야 함
+    4) 당신의 이메일을 입력
+      > git config --global user.email "your_email@yourmail.com"
+      
+5. 온라인 저장소 만들기 
+  1) new repository page로 이동
+  2)저장소에 짤고 기억할만한 이름을 저장
+  3) 연습상아 로컬에서 자신의 Readme 파일을 만듬
+  
+6. 로컬 조장소 만들기
+
+> mkdir ~/MyProject
+mkdir은 make directory의 줄임말
+
+~/는 후에 찾기 쉽게 컴퓨터 파일 구조의 최상위 단계에 저장소 생성
+> cd ~/Myproject
+
+> git init
+initialize(초기화)
+
+> touch Readme.txt
+create만드는 것을 뜻
+그 뒤에 무엇을 적든지 만들어지는 것의 이름
+파인더난 시작메뉴에서 해당 폴더로 가면 Readme.txt파일 만들어짐
+
+> git status
+> git add Readme.txt
+> git commit -m “Add Readme.txt”
+
+7. 로컬 저장소와 깃허브 저장소 연결하기
+
+https://github.com/username/myproject.git에 “MyProject”라는 이름의 깃허브 저장소가 있다고 가정
+username은 자신의 깃허브 사용자명으로 바꿔야 한며, 저장소 제목도 자신의 깃허브 저장소 제목으로 바꿔야함
+
+> git remote add origin https://github.com/username/myproject.git
+> git remote -v
+이 명령어는 로컬 저장소가 알고있는 원격 origin에 대한 모든 항목을 보여줌
+> git push
+커맨드 라인에서 여러 줄에 걸쳐 연달아 내놓을 것
+마지막으로 “everything up-to-date.”과 같은 것을 밷아낼 것이다.
+
+
+8. All Together Now! 
+
+
+
+
+    
+    
+  
