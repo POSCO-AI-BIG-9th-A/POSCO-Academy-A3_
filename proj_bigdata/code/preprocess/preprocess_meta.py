@@ -439,6 +439,8 @@ def del_oddTitle():
     df_meta = df_meta.drop(df_meta[df_meta["movie_id"] == "tt4836716"].index)
 
     df_meta = df_meta.reset_index(drop=False, inplace=False)
+
+
 movie_id()
 print(len(df_meta),3)
 release_year()
@@ -3740,6 +3742,44 @@ df_meta = insert_share()
 print(len(df_meta),26)
 df_meta = insert_legs()
 print(len(df_meta),27)
+
+# raw/inv에서 meta로 옮기기
+def inv_to_meta():
+    global df_meta
+
+    df_meta_raw = pd.read_csv('../../data/raw/spreadsheet/movie_meta_spreadsheets.csv', engine='python',encoding="utf-8")
+    df_inv = pd.read_csv('../../data/raw/movie_inventory_spreadsheets.csv', engine='python', encoding="utf-8")
+
+    for i in range(len(df_meta_raw)):
+        meta_mId = df_meta_raw["movie_id"][i]
+
+        # contract_price / studio_score / price_class
+        df_meta.loc[(df_meta["movie_id"] == meta_mId), "contract_price"] = df_meta_raw["contract_price"][i]
+        df_meta.loc[(df_meta["movie_id"] == meta_mId), "studio_score"] = df_meta_raw["studio_score"][i]
+        df_meta.loc[(df_meta["movie_id"] == meta_mId), "price_class"] = df_meta_raw["price_class"][i]
+
+    df_meta["item_id"] = "."
+    df_meta["inv_exist"] = 0
+    df_meta["contract_year"] = "."
+
+    for i in range(len(df_meta)):
+        for j in range(len(df_inv)):
+            if df_meta["movie_id"][i] == df_inv["movie_id"][j]:
+                meta_mId = df_meta["movie_id"][i]
+
+                # item_id 옮기기
+                df_meta.loc[(df_meta["movie_id"] == meta_mId), "item_id"] = df_inv["item_id"][j]
+
+                # inv_exist(inv에 데이터가 존재하면 1, 아니면 0으로 표시)
+                df_meta.loc[(df_meta["movie_id"] == meta_mId), "inv_exist"] = 1
+
+                # contract_year
+                df_meta.loc[(df_meta["movie_id"] == meta_mId), "contract_year"] = df_inv["contract_year"][j]
+
+
+inv_to_meta()
+
+
 
 del_oddTitle()
 # 중복제거
