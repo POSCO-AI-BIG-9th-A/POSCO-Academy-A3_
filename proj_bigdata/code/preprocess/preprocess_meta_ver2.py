@@ -6,53 +6,77 @@ df_meta = pd.read_csv("../../data/cleaned/movie_meta_cleaned.csv", engine= "pyth
 
 #한빈
 # 문자열로 되어 있는 숫자변수를 int, float 타입으로 변환
-def string_to_numeric(df):
+def string_to_numeric():
+        global df_meta
         col_numeric = ['release_year','runtime','imdb_score','dvd_sales','blu_sales','total_sales',
                     'legs','share','inf_income_usa','theater_opening','theater_total',
                     'metascore','big_awards_num','awards_win_num','awards_nomin_num',
                     'reviews_users','reviews_critics','budget','series_new','income_opening',
                     'votes','income_usa','income_int','income_ww']
         for col in col_numeric:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-            df = df.replace(np.nan, '.', regex=True)
-        return df
-df = string_to_numeric(df)
+            df_meta[col] = pd.to_numeric(df_meta[col], errors='coerce')
+            df_meta = df_meta.replace(np.nan, '.', regex=True)
+string_to_numeric()
 
 # Nan -> '.'
-def Nan_to_point(df):
-        for col in df.columns:
-                df.loc[df[col].isna(), col] = '.'
-        return(df)
-df = Nan_to_point(df)
+def Nan_to_point():
+    global df_meta
+    for col in df_meta.columns:
+            df_meta.loc[df_meta[col].isna(), col] = '.'
+Nan_to_point()
 
 # 불필요한 column 제거
-def remove_column(df,column):
-        df = df.drop(column,axis=1)
-        return df
-useless = ['index','mpa_rating_origin']
-remove_column(df,useless)
+def remove_column(column):
+    global df_meta
+    df_meta = df_meta.drop(column,axis=1)
+useless = ['index', 'mpa_rating_origin']
+remove_column(useless)
 
 # Inflation 파생변수 생성
-def inflation(df):
-        df['inf'] = '.'
-        for i in df.index:
-                if (df.loc[i, 'inf_income_usa'] != '.') & (df.loc[i, 'income_usa'] != '.') & (
-                        df.loc[i, 'income_usa'] != 0):
-                        df.loc[i, 'inf'] = float(df.loc[i, 'inf_income_usa']) / float(df.loc[i, 'income_usa'])
-                else:
-                        pass
-        return df
-inflation(df)
+def inflation():
+    global df_meta
+    df_meta['inf'] = '.'
+    for i in df_meta.index:
+            if (df_meta.loc[i, 'inf_income_usa'] != '.') & (df_meta.loc[i, 'income_usa'] != '.') & (
+                    df_meta.loc[i, 'income_usa'] != 0):
+                    df_meta.loc[i, 'inf'] = float(df_meta.loc[i, 'inf_income_usa']) / float(df_meta.loc[i, 'income_usa'])
+            else:
+                    pass
+inflation()
 
 # genre 더미변수 생성
-# scraping 오류 수정
-df.loc[df['movie_id'] == 'tt5851562', 'genre'] = 'Sci-Fi'
-df.loc[df['movie_id'] == 'tt1781967', 'genre'] = 'Game-Show'
-df.loc[df['movie_id'] == 'tt7048386', 'genre'] = 'Crime, Drama, Horror, Mystery, Thriller'
-df.loc[df['movie_id'] == 'tt0498879', 'genre'] = 'Reality-TV'
-df.loc[df['movie_id'] == 'tt4403432', 'genre'] = 'Crime'
-df.loc[df['movie_id'] == 'tt2010510', 'genre'] = 'Reality-TV'
-
+def genre_get_dummies():
+    global df_meta
+    # scraping 오류 수정
+    df_meta.loc[df_meta['movie_id'] == 'tt5851562', 'genre'] = 'Sci-Fi'
+    df_meta.loc[df_meta['movie_id'] == 'tt1781967', 'genre'] = 'Game-Show'
+    df_meta.loc[df_meta['movie_id'] == 'tt7048386', 'genre'] = 'Crime, Drama, Horror, Mystery, Thriller'
+    df_meta.loc[df_meta['movie_id'] == 'tt0498879', 'genre'] = 'Reality-TV'
+    df_meta.loc[df_meta['movie_id'] == 'tt4403432', 'genre'] = 'Crime'
+    df_meta.loc[df_meta['movie_id'] == 'tt2010510', 'genre'] = 'Reality-TV'
+    df_meta.loc[df_meta['movie_id'] == 'tt4950016', 'genre'] = 'Comedy'
+    # 전체 장르 목록 구하기
+    genre_list = []
+    for i in df_meta.index:
+        genre = df_meta.loc[i,'genre'].split(',')
+        for g in genre:
+            g = g.strip().lower()
+            if g not in genre_list:
+                genre_list.append(g)
+    genre_list.remove('.')
+    # 각 장르별 더미 변수 만들기
+    for i in df_meta.index:
+        genre_0 = df_meta.loc[i,'genre'].split(',')
+        genre_1 = []
+        for g in genre_0:
+            g = g.strip().lower()
+            genre_1.append(g)
+        for g in genre_list:
+            if g in genre_1:
+                df_meta.loc[i,'genre_{}'.format(g)] = 1
+            else:
+                df_meta.loc[i,'genre_{}'.format(g)] = 0
+genre_get_dummies()
 
 def dvd_over_income() :
     global df_meta
