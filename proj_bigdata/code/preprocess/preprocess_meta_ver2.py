@@ -78,6 +78,8 @@ def genre_get_dummies():
                 df_meta.loc[i,'genre_{}'.format(g)] = 0
 genre_get_dummies()
 
+#채은
+# 극장 대비 dvd 인기 지표 변수 만들기
 def dvd_over_income() :
     global df_meta
 
@@ -128,7 +130,32 @@ def dvd_over_income() :
 
 dvd_over_income()
 
+# 결측치 14개 이상인 관측치 삭제
+def tm_nan_row_drop():
+    global df_meta
+    nancount = []
+    for i in df_meta.index:
+        count = 0
+        consider_columns = ["movie_id", "title", "release_year", "runtime", "mpa_rating", "imdb_score", "dvd_sales", "blu_sales","total_sales", 
+                 "legs", "share", "inf_income_usa", "theater_opening", "theater_total", "src", "creative_type", "director", "actor", "writer",
+                 "description", "synop", "awards","poster", "metascore", "release_dvd", "genre", "country", "language", "budget", "kwrds",
+                  "income_opening", "votes", "income_usa", "income_int", "income_ww", "poster", "reviews_users", "reviews_critics", "prd_mthd",
+                    "prd_company", "release_date"]
+                # 삭제예정 컬럼 불포함 : mpa_rating_origin, series 불포함 
+                # 파생변수/더미변수 불포함 : big_awards_num, awards_win_num, awards_nomin_num, series_new, actor_1, actor_2, actor_3, actor_4
+                # 교수님이 임의추가한 세변수 불포함 : contract_price, studio_score, price_class
+        for c in consider_columns:
+            
+            if df_meta[c][i]=="." :
+                count+=1
+        if count>=14 : nancount.append(i)
+    print(str(len(nancount))+"개 관측치 삭제")
+    for i in nancount:
+        df_meta = df_meta.drop(i,0)
+    print("제거 후 관측치 "+str(len(df_meta))+"개")
 
+tm_nan_row_drop()
+    
 #경원
 
 # raw/inv에서 meta로 옮기기
