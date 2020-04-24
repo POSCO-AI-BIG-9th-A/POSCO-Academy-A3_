@@ -439,6 +439,8 @@ def del_oddTitle():
     df_meta = df_meta.drop(df_meta[df_meta["movie_id"] == "tt4836716"].index)
 
     df_meta = df_meta.reset_index(drop=False, inplace=False)
+
+
 movie_id()
 print(len(df_meta),3)
 release_year()
@@ -3740,6 +3742,10 @@ df_meta = insert_share()
 print(len(df_meta),26)
 df_meta = insert_legs()
 print(len(df_meta),27)
+
+
+
+
 
 del_oddTitle()
 # 중복제거
