@@ -1,9 +1,9 @@
 import pandas as pd
 
-df_customer = pd.read_csv("C:/Users/cresc/PycharmProjects/POSCO-Academy-A3_/proj_bigdata/data/cleaned/movie_customer_cleaned.csv", engine= "python", encoding='utf-8')
-df_download = pd.read_csv("C:/Users/cresc/PycharmProjects/POSCO-Academy-A3_/proj_bigdata/data/raw/movie_download_spreadsheets.csv", engine= "python", encoding='utf-8')
-df_price = pd.read_csv("C:/Users/cresc/PycharmProjects/POSCO-Academy-A3_/proj_bigdata/data/raw/movie_price_spreadsheets.csv", engine= "python", encoding='utf-8')
-df_meta = pd.read_csv("C:/Users/cresc/PycharmProjects/POSCO-Academy-A3_/proj_bigdata/data/cleaned/movie_meta_cleaned_ver2.csv", engine= "python", encoding='utf-8')
+df_customer = pd.read_csv("../../data/cleaned/movie_customer_cleaned.csv", engine= "python", encoding='utf-8')
+df_download = pd.read_csv("../../data/raw/movie_download_spreadsheets.csv", engine= "python", encoding='utf-8')
+df_price = pd.read_csv("../../data/raw/movie_price_spreadsheets.csv", engine= "python", encoding='utf-8')
+df_meta = pd.read_csv("../../data/cleaned/movie_meta_cleaned_ver2.csv.csv", engine= "python", encoding='utf-8')
 
 # 연도별 인플레이션(2018년도 가치로 환산) https://www.usinflationcalculator.com/inflation/current-inflation-rates/
 df_download['down_year'].describe()
@@ -53,3 +53,7 @@ total_revenue = df_meta[df_meta['movie_down_sales'] != '.'][
 total_investment = df_meta[df_meta['contract_price_inf'] != '.']['contract_price_inf'].sum()
 ROI = float(total_revenue / total_investment) * 100
 print('ROI: %.2f%%' % ROI)
+
+df_meta.to_csv('../../data/cleaned/movie_meta_cleaned_ver3.csv', header=True, index=False)
+df_customer.to_csv('../../data/cleaned/movie_customer_cleaned_ver3.csv', header=True, index=False)
+df_download.to_csv('../../data/cleaned/movie_download_cleaned_ver3.csv', header=True, index=False)
