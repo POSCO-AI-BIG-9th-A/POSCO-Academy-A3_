@@ -5,7 +5,6 @@ df_meta = pd.read_csv("../../data/cleaned/movie_meta_cleaned.csv", engine= "pyth
 
 
 #경원
-
 # raw/inv에서 meta로 옮기기
 def inv_to_meta():
     global df_meta
@@ -62,27 +61,21 @@ def inv_to_meta():
 
                 # contract_year 옮기기
                 df_meta.loc[(df_meta["movie_id"] == meta_mId), "contract_year"] = df_inv["contract_year"][j]
+inv_to_meta()
 
 #한빈
 # 문자열로 되어 있는 숫자변수를 int, float 타입으로 변환
-def string_to_numeric():
+def string_to_numeric(col_numeric):
         global df_meta
-        col_numeric = ['release_year','runtime','imdb_score','dvd_sales','blu_sales','total_sales',
-                    'legs','share','inf_income_usa','theater_opening','theater_total',
-                    'metascore','big_awards_num','awards_win_num','awards_nomin_num',
-                    'reviews_users','reviews_critics','budget','series_new','income_opening',
-                    'votes','income_usa','income_int','income_ww']
         for col in col_numeric:
             df_meta[col] = pd.to_numeric(df_meta[col], errors='coerce')
             df_meta = df_meta.replace(np.nan, '.', regex=True)
-string_to_numeric()
-
-# Nan -> '.'
-def Nan_to_point():
-    global df_meta
-    for col in df_meta.columns:
-            df_meta.loc[df_meta[col].isna(), col] = '.'
-Nan_to_point()
+col_numeric = ['release_year', 'runtime', 'imdb_score', 'dvd_sales', 'blu_sales', 'total_sales',
+               'legs', 'share', 'inf_income_usa', 'theater_opening', 'theater_total',
+               'metascore', 'big_awards_num', 'awards_win_num', 'awards_nomin_num',
+               'reviews_users', 'reviews_critics', 'budget', 'series_new', 'income_opening',
+               'votes', 'income_usa', 'income_int', 'income_ww', 'contract_price', 'studio_score', 'price_class','contract_year']
+string_to_numeric(col_numeric)
 
 # 불필요한 column 제거
 def remove_column(column):
@@ -138,7 +131,23 @@ def genre_get_dummies():
 genre_get_dummies()
 
 # country 변수 1,2,3로 쪼개기
+def country():
+    global df_meta
+    df_meta['country_1'] = df_meta['country'].str.split(',').str[0]
+    df_meta['country_2'] = df_meta['country'].str.split(',').str[1]
+    df_meta['country_3'] = df_meta['country'].str.split(',').str[2]
+    df_meta['country_1'].str.strip()
+    df_meta['country_2'].str.strip()
+    df_meta['country_3'].str.strip()
 
+# Nan -> '.'
+def Nan_to_point():
+    global df_meta
+    for col in df_meta.columns:
+            df_meta.loc[df_meta[col].isna(), col] = '.'
+Nan_to_point()
+
+#채은
 def dvd_over_income() :
     global df_meta
 
@@ -186,10 +195,10 @@ def dvd_over_income() :
         else : L.append(".")
 
     df_meta["dvd_over_income"] = L
-
 dvd_over_income()
 
 
+df_meta.to_csv('../../data/cleaned/movie_meta_cleaned_ver2.csv', header=True, index=False)
 
 
-# inv_to_meta()
+
