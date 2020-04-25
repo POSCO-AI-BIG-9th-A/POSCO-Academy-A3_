@@ -3,7 +3,7 @@ import pandas as pd
 df_customer = pd.read_csv("../../data/cleaned/movie_customer_cleaned.csv", engine= "python", encoding='utf-8')
 df_download = pd.read_csv("../../data/raw/movie_download_spreadsheets.csv", engine= "python", encoding='utf-8')
 df_price = pd.read_csv("../../data/raw/movie_price_spreadsheets.csv", engine= "python", encoding='utf-8')
-df_meta = pd.read_csv("../../data/cleaned/movie_meta_cleaned_ver2.csv.csv", engine= "python", encoding='utf-8')
+df_meta = pd.read_csv("../../data/cleaned/movie_meta_cleaned_ver2.csv", engine= "python", encoding='utf-8')
 
 # 연도별 인플레이션(2018년도 가치로 환산) https://www.usinflationcalculator.com/inflation/current-inflation-rates/
 df_download['down_year'].describe()
