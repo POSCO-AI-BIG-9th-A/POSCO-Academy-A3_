@@ -139,6 +139,7 @@ def country():
     df_meta['country_1'].str.strip()
     df_meta['country_2'].str.strip()
     df_meta['country_3'].str.strip()
+country()
 
 # Nan -> '.'
 def Nan_to_point():
@@ -196,7 +197,6 @@ def dvd_over_income() :
 
     df_meta["dvd_over_income"] = L
 dvd_over_income()
-
 
 df_meta.to_csv('../../data/cleaned/movie_meta_cleaned_ver2.csv', header=True, index=False)
 
