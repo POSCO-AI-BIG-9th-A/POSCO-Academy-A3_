@@ -460,14 +460,42 @@ print(len(df_meta),10)
 metascore()
 print(len(df_meta),11)
 #다연
-def release_date_genre_country_language():
+def fill_null_releasedate_language_country_genre():
     global df_meta
-    meta_after = pd.read_csv('../../data/scraping/meta_(release_date,language,country,genre).csv')
-    df_meta=df_meta.drop(['release_date','genre','country','language'],axis=1)
-    df_meta['release_date']=meta_after['release_date']
-    df_meta['genre']=meta_after['genre']
-    df_meta['country']=meta_after['country']
-    df_meta['language']=meta_after['language']
+    # release_date null값 결측치 채우기 
+    df_meta.loc[df_meta['movie_id']=='tt1804538','release_date']='09 May 1997'
+    df_meta.loc[df_meta['movie_id']=='tt0306892','release_date']='28 Mar 2004'
+    df_meta.loc[df_meta['movie_id']=='tt4906112','release_date']='27 Oct 2015'
+    df_meta.loc[df_meta['movie_id']=='tt0785025','release_date']='06 Oct 2006'
+    df_meta.loc[df_meta['movie_id']=='tt1390404','release_date']='01 Aug 2009'
+    df_meta.loc[df_meta['movie_id']=='tt0338497','release_date']='18 Jul 2003'
+    df_meta.loc[df_meta['movie_id']=='tt2139721','release_date']='15 May 2014'
+    df_meta.loc[df_meta['movie_id']=='tt3130704','release_date']='12 Apr 2014'
+    df_meta.loc[df_meta['movie_id']=='tt1848834','release_date']='23 Jun 2015'
+    df_meta.loc[df_meta['movie_id']=='tt1360826','release_date']='05 Oct 2010'
+    df_meta.loc[df_meta['movie_id']=='tt0015624','release_date']='19 Nov 1925'
+    df_meta.loc[df_meta['movie_id']=='tt0392798','release_date']='12 Aug 2002'
+    df_meta.loc[df_meta['movie_id']=='tt0481267','release_date']='01 Apr 1996'
+
+    # genre null값 결측치 채우기 
+    df_meta.loc[df_meta['movie_id']=='tt6304710','genre']='Drama'
+    df_meta.loc[df_meta['movie_id']=='tt0382918','genre']='Documentary, Short'
+    df_meta.loc[df_meta['movie_id']=='tt4064028','genre']='Adventure'
+    df_meta.loc[df_meta['movie_id']=='tt6000398','genre']='Animation, Action, Adventure, Family, Fantasy, Sci-Fi'
+    df_meta.loc[df_meta['movie_id']=='tt0382489','genre']='Documentary'
+    df_meta.loc[df_meta['movie_id']=='tt6051948','genre']='Documentary'
+
+    # genre null값 결측치 채우기
+    df_meta.loc[df_meta['movie_id']=='tt1388882','country']='USA'
+    df_meta.loc[df_meta['movie_id']=='tt4064028','country']='USA'
+    df_meta.loc[df_meta['movie_id']=='tt1365472','country']='Sweden'
+    df_meta.loc[df_meta['movie_id']=='tt6000398','country']='Japan'
+    df_meta.loc[df_meta['movie_id']=='tt1975161','country']='Australia'
+    df_meta.loc[df_meta['movie_id']=='tt0392798','country']='USA'
+
+    # language null값 결측치 채우기
+    df_meta.loc[df_meta['movie_id']=='tt6000398','language']='Japanese'
+
 def Insert_prd_mthd():
     global df_meta
     df = pd.read_csv('../../data/scraping/scrapping_prd_mthd.csv', encoding='cp949')  # 주소 바꾸기
@@ -500,7 +528,7 @@ Insert_prd_mthd()
 print(len(df_meta),13)
 Insert_prd_company()
 print(len(df_meta),14)
-release_date_genre_country_language()
+fill_null_releasedate_language_country_genre()
 #한빈
 def budget():
     global df_meta
