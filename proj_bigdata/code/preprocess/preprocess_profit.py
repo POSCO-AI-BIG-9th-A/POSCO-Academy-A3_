@@ -46,5 +46,5 @@ ROI = float(total_revenue / total_investment) * 100
 print('ROI: %.2f%%' % ROI)
 
 
-df_meta.to_csv('../../data/cleaned/movie_meta_cleaned.csv', header=True, index=False)
+df_meta.to_csv('../../data/cleaned/movie_meta_cleaned_ver3.csv', header=True, index=False)
 df_customer.to_csv('../../data/cleaned/movie_customer_cleaned.csv', header=True, index=False)
