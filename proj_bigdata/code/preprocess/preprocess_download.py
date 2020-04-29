@@ -21,6 +21,6 @@ for i in df_download.index:
             pass
 
 df_download = df_download[df_download['down_price'].isna() == False]
-df_download.reset_index().drop('index', axis=1)
+df_download = df_download.reset_index().drop('index', axis=1)
 
 df_download.to_csv('../../data/cleaned/movie_download_cleaned.csv', header=True, index=False)
