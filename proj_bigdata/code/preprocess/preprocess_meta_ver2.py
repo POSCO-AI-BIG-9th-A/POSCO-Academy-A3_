@@ -206,57 +206,29 @@ def tm_nan_row_drop():
     nancount = []
     for i in df_meta.index:
         count = 0
-        consider_columns = ["movie_id", "title", "release_year", "runtime", "mpa_rating", "imdb_score", "dvd_sales", "blu_sales","total_sales", 
-                 "legs", "share", "inf_income_usa", "theater_opening", "theater_total", "src", "creative_type", "director", "actor", "writer",
-                 "description", "synop", "awards","poster", "metascore", "release_dvd", "genre", "country", "language", "budget", "kwrds",
-                  "income_opening", "votes", "income_usa", "income_int", "income_ww", "poster", "reviews_users", "reviews_critics", "prd_mthd",
-                    "prd_company", "release_date"]
-                # 삭제예정 컬럼 불포함 : mpa_rating_origin, series 불포함 
-                # 파생변수/더미변수 불포함 : big_awards_num, awards_win_num, awards_nomin_num, series_new, actor_1, actor_2, actor_3, actor_4
-                # 교수님이 임의추가한 세변수 불포함 : contract_price, studio_score, price_class
+        consider_columns = ["movie_id", "title", "release_year", "runtime", "mpa_rating", "imdb_score", "dvd_sales",
+                            "blu_sales", "total_sales",
+                            "legs", "share", "inf_income_usa", "theater_opening", "theater_total", "src",
+                            "creative_type", "director", "actor", "writer",
+                            "description", "synop", "awards", "poster", "metascore", "release_dvd", "genre", "country",
+                            "language", "budget", "kwrds",
+                            "income_opening", "votes", "income_usa", "income_int", "income_ww", "poster",
+                            "reviews_users", "reviews_critics", "prd_mthd",
+                            "prd_company", "release_date"]
+        # 삭제예정 컬럼 불포함 : mpa_rating_origin, series 불포함
+        # 파생변수/더미변수 불포함 : big_awards_num, awards_win_num, awards_nomin_num, series_new, actor_1, actor_2, actor_3, actor_4
+        # 교수님이 임의추가한 세변수 불포함 : contract_price, studio_score, price_class
         for c in consider_columns:
-            
-            if df_meta[c][i]=="." :
-                count+=1
-        if count>=14 : nancount.append(i)
-    print(str(len(nancount))+"개 관측치 삭제")
+
+            if df_meta[c][i] == ".":
+                count += 1
+        if count >= 14: nancount.append(i)
+    print(str(len(nancount)) + "개 관측치 삭제")
     for i in nancount:
-        df_meta = df_meta.drop(i,0)
-    print("제거 후 관측치 "+str(len(df_meta))+"개")
-
+        df_meta = df_meta.drop(i, 0)
+    print("제거 후 관측치 " + str(len(df_meta)) + "개")
 tm_nan_row_drop()
-    
-#경원
 
-# raw/inv에서 meta로 옮기기
-def inv_to_meta():
-    global df_meta
-
-    df_meta_raw = pd.read_csv('../../data/raw/spreadsheet/movie_meta_spreadsheets.csv', engine='python',encoding="utf-8")
-    df_inv = pd.read_csv('../../data/raw/movie_inventory_spreadsheets.csv', engine='python', encoding="utf-8")
-
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt2072227"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt1391871"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt1266072"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt0488888"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt1664697"].index)
-
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt4380070"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt4982758"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt1014762"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt0290983"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt2367359"].index)
-
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt0485877"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt7017420"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt3075362"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt1095453"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt1663702"].index)
-
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt3462264"].index)
-    df_meta_raw = df_meta_raw.drop(df_meta_raw[df_meta_raw["movie_id"] == "tt4836716"].index)
-
-    df_meta_raw = df_meta_raw.reset_index(drop=False, inplace=False)
 df_meta.to_csv('../../data/cleaned/movie_meta_cleaned_ver2.csv', header=True, index=False)
 
 
