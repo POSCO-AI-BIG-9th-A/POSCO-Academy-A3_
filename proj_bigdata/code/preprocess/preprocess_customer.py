@@ -24,4 +24,22 @@ def cust_preprocess():
 
 cust_preprocess()
 
-df_customer.to_csv("../../data/cleaned/movie_customer_cleaned.csv", header=True, index=False)
+
+def freq_down_weekday():
+    import numpy as np
+    global df_customer
+    global df_download
+
+    L = []
+    for x in df_customer["customer_id"]:
+        weekdays = list(df_download[df_download["customer_id"] == x]["weekday"])
+        if len(weekdays) > 0:
+            L.append(np.bincount(weekdays).argmax())
+        else:
+            L.append(".")
+
+    df_customer["freq_down_weekday"] = L
+
+freq_down_weekday()
+
+df_customer.to_csv("../../data/cleaned/movie_customer_cleaned_ver3.csv", header=True, index=False)
