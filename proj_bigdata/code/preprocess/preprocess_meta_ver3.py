@@ -17,34 +17,30 @@ prd_cnt = df_meta[df_meta['studio'] != '.']
 prd_cnt = prd_cnt.groupby(['studio']).count()
 prd_cnt = prd_cnt['cnt_movie']
 
-cnt_base_50 = int(prd_cnt.quantile(.915))
-cnt_base_20 = int(prd_cnt.quantile(.83))
-cnt_base_10 = int(prd_cnt.quantile(.73))
-
 budget_mid = df_meta[['studio', 'budget']]
 budget_mid = budget_mid[budget_mid['budget']!= '.']
 budget_mid.reset_index()
 
 budget_mid["budget"] = budget_mid["budget"].astype(float)
 
-budget_mid = budget_mid.groupby(['studio']).median()
-budget_mid = budget_mid['budget']
-
 budget_base_50000000 = int(budget_mid.quantile(.95))
 budget_base_20000000 = int(budget_mid.quantile(.60))
 budget_base_5000000 = int(budget_mid.quantile(.15))
+
+budget_mid = budget_mid.groupby(['studio']).median()
+budget_mid = budget_mid['budget']
 
 prd_list = pd.merge(prd_cnt, budget_mid, on ='studio')
 prd_list["studio_score"] = 0
 
 for i in prd_list.index:
-    if prd_list['cnt_movie'][i] >= cnt_base_50 and prd_list['budget'][i] >= budget_base_50000000 :
+    if prd_list['cnt_movie'][i] >= 121 and prd_list['budget'][i] >= budget_base_50000000 :
          prd_list.loc[i,'studio_score'] = int(10)
-    elif prd_list['cnt_movie'][i]  >= cnt_base_20 and prd_list['budget'][i] >= budget_base_20000000 :
+    elif prd_list['cnt_movie'][i]  >= 51 and prd_list['budget'][i] >= budget_base_20000000 :
          prd_list.loc[i,'studio_score'] = int(6)
-    elif prd_list['cnt_movie'][i]  >= cnt_base_10 or prd_list['budget'][i] >= budget_base_20000000 :
+    elif prd_list['cnt_movie'][i]  >= 16 or prd_list['budget'][i] >= budget_base_20000000 :
          prd_list.loc[i,'studio_score'] = int(4)
-    elif prd_list['cnt_movie'][i] >= cnt_base_10 or prd_list['budget'][i] >= budget_base_5000000:
+    elif prd_list['cnt_movie'][i] >= 16 or prd_list['budget'][i] >= budget_base_5000000:
          prd_list.loc[i,'studio_score'] = int(2)
     else :
         prd_list.loc[i, 'studio_score'] = int(1)
