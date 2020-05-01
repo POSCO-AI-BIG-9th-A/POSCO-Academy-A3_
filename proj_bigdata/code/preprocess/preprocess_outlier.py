@@ -4,8 +4,9 @@ import math
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("../../data/cleaned/movie_meta_cleaned_ver5_DateTransformed.csv", engine= "python", encoding='cp949')
+df = pd.read_csv("../../data/cleaned/movie_meta_cleaned_ver6_transformed.csv", engine= "python", encoding='cp949')
 
+df = df.drop('Unnamed: 0', axis = 1)
 
 # String to num
 col_numeric = ['release_year', 'release_date', 'runtime', 'imdb_score', 'dvd_sales', 'blu_sales', 'total_sales',
@@ -116,11 +117,12 @@ def remove_column(column):
     global df
     df = df.drop(column,axis=1)
 useless = ['country','series','genre','actor','writer','prd_company', 'creative_type','genre_adult','genre_film-noir',
-           'genre_game-show','genre_news','genre_reality-tv','genre_short','genre_talk-show','kwrds']
+           'genre_game-show','genre_news','genre_reality-tv','genre_short','genre_talk-show','kwrds','description',
+           'synop','language']
 remove_column(useless)
 
 
-
+df = df.drop('index', axis = 1)
 
 # csv로 저장
 df.to_csv('../../data/cleaned/movie_meta_cleaned_ver7.csv', header=True, index=False)
