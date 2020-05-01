@@ -4,12 +4,11 @@ import math
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("../../data/cleaned/movie_meta_cleaned_ver5.csv", engine= "python", encoding='utf-8')
-
+df = pd.read_csv("../../data/cleaned/movie_meta_cleaned_ver5_DateTransformed.csv", engine= "python", encoding='cp949')
 
 
 # String to num
-col_numeric = ['release_year', 'runtime', 'imdb_score', 'dvd_sales', 'blu_sales', 'total_sales',
+col_numeric = ['release_year', 'release_date', 'runtime', 'imdb_score', 'dvd_sales', 'blu_sales', 'total_sales',
                'legs', 'share', 'inf_income_usa', 'theater_opening', 'theater_total',
                'metascore', 'big_awards_num', 'awards_win_num', 'awards_nomin_num',
                'reviews_users', 'reviews_critics', 'budget', 'series_new', 'income_opening',
@@ -96,14 +95,31 @@ for i in nan_idx:
 # studio 결측치 포함한 행 제거
 df = df[df['studio'].isna() == False]
 
+# 영어/비영어 파생변수 생성
+df['english'] = 0
+for i in df.index:
+    if 'english' in df['language'][i].lower():
+        df['english'][i] = 1
+
+# dvd, bluray 발매여부 파생변수 생성
+df['dvd'] = 0
+for i in df.index:
+    if math.isnan(df['dvd_sales'][i]) == False:
+        df['dvd'][i] = 1
+df['blu'] = 0
+for i in df.index:
+    if math.isnan(df['blu_sales'][i]) == False:
+        df['blu'][i] = 1
 
 # 불필요한 column 제거
 def remove_column(column):
-    global df_meta
-    df_meta = df_meta.drop(column,axis=1)
+    global df
+    df = df.drop(column,axis=1)
 useless = ['country','series','genre','actor','writer','prd_company', 'creative_type','genre_adult','genre_film-noir',
-           'genre_game-show','genre_news','genre_reality-tv','genre_short','genre_talk-show']
+           'genre_game-show','genre_news','genre_reality-tv','genre_short','genre_talk-show','kwrds']
 remove_column(useless)
+
+
 
 
 # csv로 저장
