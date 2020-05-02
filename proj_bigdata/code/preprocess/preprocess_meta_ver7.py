@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 import math
-import seaborn as sns
-import matplotlib.pyplot as plt
+from collections import Counter
+
 
 df = pd.read_csv("../../data/cleaned/movie_meta_cleaned_ver6_transformed.csv", engine= "python", encoding='cp949')
 
@@ -79,14 +79,14 @@ inflation()
 # src 결측치 최빈값으로 대체
 nan_idx = np.argwhere([df['src'].isna()])
 for i in nan_idx:
-    df['src'][i[1]] = 'original screenplay'
+    df.loc[i[1],'src'] = 'original screenplay'
 
 # reviews_users, reviews_critics 결측치 0으로 대체
 for i in df.index:
     if math.isnan(df['reviews_users'][i]):
-        df['reviews_users'][i] = 0
+        df.loc[i,'reviews_users'] = 0
     if math.isnan(df['reviews_critics'][i]):
-        df['reviews_critics'][i] = 0
+        df.loc[i,'reviews_critics'] = 0
 
 # prd_mthd 결측치 최빈값으로 대체
 nan_idx = np.argwhere([df['prd_mthd'].isna()])
@@ -96,29 +96,112 @@ for i in nan_idx:
 # studio 결측치 포함한 행 제거
 df = df[df['studio'].isna() == False]
 
+# director 결측치 포함한 행 제거
+df = df[df['director'].isna() == False]
+
 # 영어/비영어 파생변수 생성
 df['english'] = 0
 for i in df.index:
     if 'english' in df['language'][i].lower():
-        df['english'][i] = 1
+        df.loc[i,'english']= 1
 
 # dvd, bluray 발매여부 파생변수 생성
 df['dvd'] = 0
 for i in df.index:
     if math.isnan(df['dvd_sales'][i]) == False:
-        df['dvd'][i] = 1
+        df.loc[i,'dvd'] = 1
 df['blu'] = 0
 for i in df.index:
     if math.isnan(df['blu_sales'][i]) == False:
-        df['blu'][i] = 1
+        df.loc[i,'blu'] = 1
+
+# 미국 제작 파생변수 생성
+df['cntry_USA'] = 0
+for i in df.index:
+    if 'USA' in df['country'][i]:
+        df.loc[i,'cntry_USA'] = 1
+
+# actor_A, actor_B, actor_C 파생변수 생성
+actor_list = []
+for actor in df['actor_1']:
+    actor_list.append(actor)
+for actor in df['actor_2']:
+    actor_list.append(actor)
+for actor in df['actor_3']:
+    actor_list.append(actor)
+for actor in df['actor_4']:
+    actor_list.append(actor)
+actor_dic = Counter(actor_list)
+actor_A = { key: value for key, value in actor_dic.items() if value > 9 }
+actor_B = { key: value for key, value in actor_dic.items() if (value < 10) & (value > 4) }
+actor_C = { key: value for key, value in actor_dic.items() if (value < 5) & (value > 1)}
+print('A급, B급, C급, : {}, {}, {}'.format(len(actor_A),len(actor_B),len(actor_C)))
+df['actor_A'] = 0 # actor_A는 10작품 이상 주연: A급, 238명 (전체 9202명)
+for i in df.index:
+    if df.loc[i,'actor_1'] in actor_A.keys():
+        df.loc[i,'actor_A'] += 1
+    if df.loc[i,'actor_2'] in actor_A.keys():
+        df.loc[i,'actor_A'] += 1
+    if df.loc[i,'actor_3'] in actor_A.keys():
+        df.loc[i,'actor_A'] += 1
+    if df.loc[i,'actor_4'] in actor_A.keys():
+        df.loc[i,'actor_A'] += 1
+df['actor_B'] = 0 # actor_B는 5작품 이상 10작품 미만 주연: B급, 639명
+for i in df.index:
+    if df.loc[i,'actor_1'] in actor_B.keys():
+        df.loc[i,'actor_B'] += 1
+    if df.loc[i,'actor_2'] in actor_B.keys():
+        df.loc[i,'actor_B'] += 1
+    if df.loc[i,'actor_3'] in actor_B.keys():
+        df.loc[i,'actor_B'] += 1
+    if df.loc[i,'actor_4'] in actor_B.keys():
+        df.loc[i,'actor_B'] += 1
+df['actor_C'] = 0# actor_C는 2작품 이상 5작품 미만 주연: C급, 1995명
+for i in df.index:
+    if df.loc[i,'actor_1'] in actor_C.keys():
+        df.loc[i,'actor_C'] += 1
+    if df.loc[i,'actor_2'] in actor_C.keys():
+        df.loc[i,'actor_C'] += 1
+    if df.loc[i,'actor_3'] in actor_C.keys():
+        df.loc[i,'actor_C'] += 1
+    if df.loc[i,'actor_4'] in actor_C.keys():
+        df.loc[i,'actor_C'] += 1
+
+# director_A, director_B, director_C 파생변수 생성
+director_list = []
+for director in df['director']:
+    if ',' in director:
+        d_list = director.split(',')
+        for d in d_list:
+            director_list.append(d.strip())
+    else:
+        director_list.append(director)
+director_dic = Counter(director_list)
+director_A = { key: value for key, value in director_dic.items() if value > 11 }
+director_B = { key: value for key, value in director_dic.items() if (value < 12) & (value > 6) }
+director_C = { key: value for key, value in director_dic.items() if (value < 7) & (value > 2) }
+print('A급, B급, C급, : {}, {}, {}'.format(len(director_A),len(director_B),len(director_C)))
+df['director_A'] = 0 # director_A는 12작품 이상 연출: A급, 27명 (총 2358명)
+for i in df.index:
+    if df.loc[i,'director'] in director_A.keys():
+        df.loc[i,'director_A'] += 1
+df['director_B'] = 0 # director_B는 7작품 이상 12작품 미만 연출: B급, 96명
+for i in df.index:
+    if df.loc[i,'director'] in director_B.keys():
+        df.loc[i,'director_B'] += 1
+df['director_C'] = 0 # director_C는 3작품 이상 7작품 미만 연출: C급, 475명
+for i in df.index:
+    if df.loc[i,'director'] in director_C.keys():
+        df.loc[i,'director_C'] += 1
 
 # 불필요한 column 제거
 def remove_column(column):
     global df
     df = df.drop(column,axis=1)
-useless = ['country','series','genre','actor','writer','prd_company', 'creative_type','genre_adult','genre_film-noir',
+useless = ['series','genre','actor','writer','prd_company', 'creative_type','genre_adult','genre_film-noir',
            'genre_game-show','genre_news','genre_reality-tv','genre_short','genre_talk-show','kwrds','description',
-           'synop','language']
+           'synop','language','country','country_1','country_2','country_3','actor_1','actor_2','actor_3','actor_4',
+           'director']
 remove_column(useless)
 
 
