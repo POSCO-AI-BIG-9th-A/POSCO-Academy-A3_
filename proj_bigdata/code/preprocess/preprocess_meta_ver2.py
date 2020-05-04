@@ -130,6 +130,8 @@ def genre_get_dummies():
                 df_meta.loc[i,'genre_{}'.format(g)] = 0
 genre_get_dummies()
 
+#채은
+# 극장 대비 dvd 인기 지표 변수 만들기
 # country 변수 1,2,3로 쪼개기
 def country():
     global df_meta
