@@ -1,0 +1,41 @@
+# 순차패턴분석 라이브러리 설치 (arulesSequences)
+install.packages('arulesSequences')
+install.packages('dplyr')
+install.packages('tidyverse')
+
+library(arulesSequences)
+library(dplyr)
+library(tidyverse)
+
+
+# 예시 데이터 불러오기
+down=read.csv('C:/Users/user1/Desktop/movie_download_cleaned.csv')
+
+# create list of itme_id by customer_id & down_year
+down_seq<-down %>%
+  group_by(customer_id,down_year) %>%
+  summarize(
+    SIZE=n(),
+    ServiceLevel=paste(as.character(item_id),collapse = ';')
+  )
+
+names(down_seq)=c('sequenceID','eventID','SIZE','items')
+down_sequence<-data.frame(lapply(down_seq,as.factor))
+down_sequence<-down_sequence[order(down_sequence$sequenceID,down_sequence$eventID),]
+
+# Covert to transaction matrix data type
+write.table(down_sequence,'Cspade.txt',sep=';',row.names=FALSE,col.names=FALSE,quote=FALSE)
+down_matrix<-read_baskets('Cspade.txt',sep=';',info=c('sequenceID','eventID','SIZE'))
+
+as(head(down_matrix),'data.frame')
+summary(down_matrix)
+
+# Get frequent sequences and corresponding support values
+s2=cspade(down_matrix,parameter=list(support=0.1,maxsize=50,maxlen=30),control=list(verbose=TRUE))
+summary(s2)
+s2.df<-as(s2,'data.frame')
+s2.df
+
+s2_size<-size(s2)
+s2.df<-cbind(s2.df,s2_size)
+s2_df_size<-subset(s2.df,subset=s2_size>=2)
