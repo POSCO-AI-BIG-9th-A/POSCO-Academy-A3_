@@ -17,3 +17,43 @@ def InventoryClusterClassifier(customer_id, customer_data):
     meta_same_clus = list(df_meta[(df_meta.cluster_kmeans ==predict_cluster) & (df_meta.inv_exist==0)]["movie_id"])
     
     return predict_cluster, inv_same_clus, meta_same_clus, watched
+
+def asso_rule_filter(inv_same_clus, watched):
+    import pandas as pd
+    from itertools import combinations
+
+    asso_df = pd.read_csv("./asso_rule.csv", engine="python")
+
+    antecedents = []
+    for i in range(len(watched) + 1):
+        antecedents.append(list(combinations(watched, i)))
+    print(antecedents)
+
+    consequents = []
+    #     print(str(list(antecedents[1][0])) == str(asso_df.loc[11086,'antecedents']))
+    for c in antecedents:
+        for ids in list(c):
+            for i in asso_df.index:
+                if str(list(ids)) == str(asso_df.loc[i, 'antecedents']):
+                    consequents.append(asso_df.loc[i, 'consequents'])
+    print(consequents)
+
+    inv_same_clus_0 = []
+    inv_same_clus_1 = []
+    for ids in consequents:
+        for inv_ids in inv_same_clus:
+            if ids == str(list(inv_ids)):
+                if inv_ids in inv_same_clus_0 + inv_same_clus_1:
+                    pass
+                else:
+                    inv_same_clus_0.append(inv_ids)
+            if ids != str(list(inv_ids)):
+                if inv_ids in inv_same_clus_0 + inv_same_clus_1:
+                    pass
+                else:
+                    inv_same_clus_1.append(inv_ids)
+
+    if inv_same_clus_0 == []:
+        return inv_same_clus
+
+    return inv_same_clus_0 + inv_same_clus_1
